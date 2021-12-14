@@ -1,0 +1,26 @@
+{
+  "name": "sokoban",
+  "version": "1.0.0",
+  "description": "### [Demo](https://taniarascia.github.io/sokoban/index.html)",
+  "main": "Sokoban.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taniarascia/sokoban.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/taniarascia/sokoban/issues"
+  },
+  "homepage": "https://github.com/taniarascia/sokoban#readme",
+  "dependencies": {
+    "webpack": "^5.65.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^4.9.1"
+  }
+}
