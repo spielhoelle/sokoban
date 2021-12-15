@@ -8,7 +8,7 @@ import {
   size,
   multiplier,
   colors,
-  levelOneMap,
+  levels,
 } from './constants.js'
 import {
   isBlock,
@@ -21,6 +21,7 @@ import {
   generateGameBoard,
 } from './utils.js'
 
+const level = levels[0]
 class Sokoban {
   constructor({ level }) {
     this.canvas = document.querySelector('canvas')
@@ -76,12 +77,15 @@ class Sokoban {
 
     const rowsWithVoid = this.board.filter((row) => row.some((entry) => entry === VOID))
     // The player herself might be standing on an initially void cell:
-    if (isVoid(levelOneMap[this.findPlayerCoords().y][this.findPlayerCoords().x])) {
-      rowsWithVoid.push(levelOneMap[this.findPlayerCoords().y]);
+    if (isVoid(level[this.findPlayerCoords().y][this.findPlayerCoords().x])) {
+      rowsWithVoid.push(level[this.findPlayerCoords().y]);
     }
 
-    const rowsWithSuccess = this.board.filter((row) => row.some((entry) => entry === SUCCESS_BLOCK))
-    const isWin = rowsWithVoid.length === 0 && rowsWithSuccess.length === 1
+    const rowsWithSuccess = this.board.flatMap(a => a).filter(a => a === "success_block")
+    const levelSuccessBlocks = level.flatMap(a => a).filter(a => a === "void")
+    console.log('rowsWithSuccess', rowsWithSuccess);
+    const isWin = rowsWithVoid.length === 0 && rowsWithSuccess.length === levelSuccessBlocks.length
+    console.log('isWin', isWin);
 
     if (isWin) {
       // A winner is you
@@ -110,7 +114,7 @@ class Sokoban {
   movePlayer(playerCoords, direction) {
     // Replace previous spot with initial board state (void or empty)
     this.board[playerCoords.y][playerCoords.x] =
-      isVoid(levelOneMap[playerCoords.y][playerCoords.x]) ? VOID : EMPTY
+      isVoid(level[playerCoords.y][playerCoords.x]) ? VOID : EMPTY
 
     // Move player
     this.board[getY(playerCoords.y, direction, 1)][getX(playerCoords.x, direction, 1)] = PLAYER
@@ -141,7 +145,7 @@ class Sokoban {
         for (let i = 0; i < blocksInARow; i++) {
           // Add blocks
           this.board[getY(newBoxY, direction, i)][getX(newBoxX, direction, i)] =
-            isVoid(levelOneMap[getY(newBoxY, direction, i)][getX(newBoxX, direction, i)])
+            isVoid(level[getY(newBoxY, direction, i)][getX(newBoxX, direction, i)])
               ? SUCCESS_BLOCK
               : BLOCK
         }
@@ -150,7 +154,7 @@ class Sokoban {
     } else {
       // Move box
       // If on top of void, make into a success box
-      this.board[newBoxY][newBoxX] = isVoid(levelOneMap[newBoxY][newBoxX]) ? SUCCESS_BLOCK : BLOCK
+      this.board[newBoxY][newBoxX] = isVoid(level[newBoxY][newBoxX]) ? SUCCESS_BLOCK : BLOCK
       this.movePlayer(playerCoords, direction)
     }
   }
