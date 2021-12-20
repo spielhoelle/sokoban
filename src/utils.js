@@ -1,5 +1,4 @@
 import { EMPTY, WALL, BLOCK, SUCCESS_BLOCK, VOID, PLAYER, levels } from './constants.js'
-const currentLevel = levels[0]
 // Helpers
 export const isBlock = (cell) => [BLOCK, SUCCESS_BLOCK].includes(cell)
 export const isPlayer = (cell) => [PLAYER].includes(cell)
@@ -32,9 +31,7 @@ export const getY = (y, direction, spaces = 1) => {
 }
 
 export function generateGameBoard({ level }) {
-  if (level === 1) {
-    return JSON.parse(JSON.stringify(currentLevel)) // clone deep hack
-  }
+  return JSON.parse(JSON.stringify(levels[level]))
 }
 
 export function countBlocks(blockCount, y, x, direction, board) {

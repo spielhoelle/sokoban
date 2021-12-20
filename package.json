@@ -4,6 +4,8 @@
   "description": "### [Demo](https://taniarascia.github.io/sokoban/index.html)",
   "main": "Sokoban.js",
   "scripts": {
+    "start": "webpack --mode=development --progress --watch",
+    "dev": "concurrently 'webpack --mode=development --watch' 'live-server --watch='dist''  -n 'WEBPACK,LIVE-SERVER' --prefix name -c 'blue.bold,red.bold' --use_strict",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +23,7 @@
     "webpack": "^5.65.0"
   },
   "devDependencies": {
+    "concurrently": "^6.4.0",
     "webpack-cli": "^4.9.1"
   }
 }

@@ -21,7 +21,6 @@ import {
   generateGameBoard,
 } from './utils.js'
 
-const level = levels[0]
 class Sokoban {
   constructor({ level }) {
     this.canvas = document.querySelector('canvas')
@@ -33,6 +32,8 @@ class Sokoban {
     this.context.fillRect(0, 0, size.width, size.height)
 
     this.board = generateGameBoard({ level })
+    this.levelIndex = level
+    this.level = levels[level]
   }
 
   paintCell(context, cell, x, y) {
@@ -67,7 +68,11 @@ class Sokoban {
 
   render(options = {}) {
     if (options.restart) {
-      this.board = generateGameBoard({ level: 1 })
+      localStorage.removeItem("dw-sokoban-level")
+      this.board = generateGameBoard({ level: 0 })
+    }
+    if (options.level) {
+      this.board = generateGameBoard({ level: options.level })
     }
     this.board.forEach((row, y) => {
       row.forEach((cell, x) => {
@@ -77,15 +82,13 @@ class Sokoban {
 
     const rowsWithVoid = this.board.filter((row) => row.some((entry) => entry === VOID))
     // The player herself might be standing on an initially void cell:
-    if (isVoid(level[this.findPlayerCoords().y][this.findPlayerCoords().x])) {
-      rowsWithVoid.push(level[this.findPlayerCoords().y]);
+    if (isVoid(this.level[this.findPlayerCoords().y][this.findPlayerCoords().x])) {
+      rowsWithVoid.push(this.level[this.findPlayerCoords().y]);
     }
 
     const rowsWithSuccess = this.board.flatMap(a => a).filter(a => a === "success_block")
-    const levelSuccessBlocks = level.flatMap(a => a).filter(a => a === "void")
-    console.log('rowsWithSuccess', rowsWithSuccess);
+    const levelSuccessBlocks = this.level.flatMap(a => a).filter(a => a === "success_block" || a === "void")
     const isWin = rowsWithVoid.length === 0 && rowsWithSuccess.length === levelSuccessBlocks.length
-    console.log('isWin', isWin);
 
     if (isWin) {
       // A winner is you
@@ -93,7 +96,13 @@ class Sokoban {
       this.context.fillRect(0, 0, size.width, size.height)
       this.context.font = 'bold 60px sans-serif'
       this.context.fillStyle = colors.success_block.fill
-      this.context.fillText('A Winner is You!', 65, 300)
+      this.context.fillText('勝利!', 65, 300)
+      setTimeout(() => {
+        this.levelIndex++
+        this.level = levels[this.levelIndex]
+        localStorage.setItem("dw-sokoban-level", this.levelIndex)
+        this.render({ level: this.levelIndex })
+      }, 500);
     }
   }
 
@@ -114,7 +123,7 @@ class Sokoban {
   movePlayer(playerCoords, direction) {
     // Replace previous spot with initial board state (void or empty)
     this.board[playerCoords.y][playerCoords.x] =
-      isVoid(level[playerCoords.y][playerCoords.x]) ? VOID : EMPTY
+      isVoid(this.level[playerCoords.y][playerCoords.x]) ? VOID : EMPTY
 
     // Move player
     this.board[getY(playerCoords.y, direction, 1)][getX(playerCoords.x, direction, 1)] = PLAYER
@@ -145,7 +154,7 @@ class Sokoban {
         for (let i = 0; i < blocksInARow; i++) {
           // Add blocks
           this.board[getY(newBoxY, direction, i)][getX(newBoxX, direction, i)] =
-            isVoid(level[getY(newBoxY, direction, i)][getX(newBoxX, direction, i)])
+            isVoid(this.level[getY(newBoxY, direction, i)][getX(newBoxX, direction, i)])
               ? SUCCESS_BLOCK
               : BLOCK
         }
@@ -154,7 +163,7 @@ class Sokoban {
     } else {
       // Move box
       // If on top of void, make into a success box
-      this.board[newBoxY][newBoxX] = isVoid(level[newBoxY][newBoxX]) ? SUCCESS_BLOCK : BLOCK
+      this.board[newBoxY][newBoxX] = isVoid(this.level[newBoxY][newBoxX]) ? SUCCESS_BLOCK : BLOCK
       this.movePlayer(playerCoords, direction)
     }
   }

@@ -11,16 +11,13 @@ body {
   justify-content: center;
   height: 100vh;
   line-height: 1.2;
-}
-
-h1,
-p {
+  flex-flow: column;
   color: white;
 }
 
 h1 {
   margin: 0 0 0.5rem;
-  font-size: 2rem;
+  font-size: 6rem;
 }
 
 p {
@@ -30,7 +27,6 @@ p {
 
 button {
   margin: 0.5rem 0;
-  display: block;
   background: #4ccd5a;
   border: 1px solid #4ccd5a;
   padding: 0.5rem 1rem;

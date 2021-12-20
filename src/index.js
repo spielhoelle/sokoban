@@ -1,9 +1,19 @@
-import { directions, keys } from './constants.js'
+import { directions, keys, levels } from './constants.js'
 import Sokoban from './Sokoban.js'
+const levelSelector = document.querySelector('#levelselector')
 
+levels.map((level, index) => {
+  const option = document.createElement('option')
+  option.value = index
+  option.innerText = index + 1
+  levelSelector.appendChild(option)
+})
 // init
-const sokoban = new Sokoban({ level: 1 })
-sokoban.render({ restart: true })
+const cachedLevel = localStorage.getItem("dw-sokoban-level")
+const theLevel = cachedLevel ? Number(cachedLevel) : 0
+levelSelector.selectedIndex = theLevel
+let sokoban = new Sokoban({ level: theLevel })
+sokoban.render({ restart: true, level: theLevel })
 
 // re-render
 document.addEventListener('keydown', (event) => {
@@ -33,5 +43,12 @@ document.addEventListener('keydown', (event) => {
 })
 
 document.querySelector('button').addEventListener('click', (event) => {
+  levelSelector.value = theLevel
   sokoban.render({ restart: true })
+})
+levelSelector.addEventListener('change', (event) => {
+  localStorage.setItem("dw-sokoban-level", Number(event.target.value))
+  sokoban = new Sokoban({ level: Number(event.target.value) })
+  sokoban.render({ level: Number(event.target.value) })
+  event.target.blur()
 })
