@@ -9,6 +9,7 @@ import {
   multiplier,
   colors,
   levels,
+  maxWidth
 } from './constants.js'
 import {
   isBlock,
@@ -32,46 +33,64 @@ class Sokoban {
     this.context.fillRect(0, 0, size.width, size.height)
 
     this.board = generateGameBoard({ level })
-    this.levelIndex = level
+    this.boardIndex = level
     this.level = levels[level]
+    const maxLevel = localStorage.getItem("dw-sokoban-maxlevel") ? Number(localStorage.getItem("dw-sokoban-maxlevel")) : 0
+    const currentlevel = localStorage.getItem("dw-sokoban-currentlevel") ? Number(localStorage.getItem("dw-sokoban-currentlevel")) : 0
+    if (currentlevel > maxLevel) {
+      localStorage.setItem("dw-sokoban-maxlevel", currentlevel)
+      document.querySelector('#levelselector').selectedIndex = this.boardIndex
+    }
+    levels.slice(0, Number(maxLevel) + 1).map((level, index) => {
+      const option = document.createElement('option')
+      option.value = index
+      option.innerText = index + 1
+      document.querySelector('#levelselector').appendChild(option)
+      document.querySelector('#levelselector').selectedIndex = localStorage.getItem("dw-sokoban-currentlevel") ? Number(localStorage.getItem("dw-sokoban-currentlevel")) : 0
+    })
   }
 
   paintCell(context, cell, x, y) {
     if (cell === 'void' || cell === 'player') {
-      const circleSize = cell === 'player' ? 20 : 10
+      const circleSize = cell === 'player' ? multiplier / 3 : multiplier / 5
 
       this.context.beginPath()
-      this.context.rect(x * multiplier, y * multiplier, multiplier, multiplier)
+      this.context.rect(x * multiplier + 2.5, y * multiplier + 2.5, multiplier, multiplier)
       this.context.fillStyle = colors.empty.fill
       this.context.fill()
 
       this.context.beginPath()
-      this.context.arc(x * multiplier + 75 / 2, y * multiplier + 75 / 2, circleSize, 0, 2 * Math.PI)
-      this.context.lineWidth = 10
+      this.context.arc(x * multiplier + 2.5 + multiplier / 2, y * multiplier + 2.5 + multiplier / 2, circleSize, 0, 2 * Math.PI)
+      this.context.lineWidth = multiplier / 5
       this.context.strokeStyle = colors[cell].stroke
       this.context.fillStyle = colors[cell].fill
       this.context.fill()
       this.context.stroke()
     } else {
       this.context.beginPath()
-      this.context.rect(x * multiplier + 5, y * multiplier + 5, multiplier - 10, multiplier - 10)
+      this.context.rect(x * multiplier + 5, y * multiplier + 5, multiplier - multiplier / 5, multiplier - multiplier / 5)
       this.context.fillStyle = colors[cell].fill
       this.context.fill()
 
       this.context.beginPath()
-      this.context.rect(x * multiplier + 5, y * multiplier + 5, multiplier - 10, multiplier - 10)
-      this.context.lineWidth = 10
+      this.context.rect(x * multiplier + 5, y * multiplier + 5, multiplier - multiplier / 5, multiplier - multiplier / 5)
+      this.context.lineWidth = multiplier / 5
       this.context.strokeStyle = colors[cell].stroke
       this.context.stroke()
     }
   }
 
   render(options = {}) {
+    this.context = this.canvas.getContext('2d')
+    this.context.fillStyle = "black"
+    this.context.fillRect(0, 0, size.width, size.height)
     if (options.restart) {
-      localStorage.removeItem("dw-sokoban-level")
-      this.board = generateGameBoard({ level: 0 })
+      localStorage.removeItem("dw-sokoban-currentlevel")
+      this.board = generateGameBoard({ level: options.level || 0 })
     }
-    if (options.level) {
+    if (options.level !== undefined) {
+      this.level = levels[options.level]
+      this.boardIndex = options.level
       this.board = generateGameBoard({ level: options.level })
     }
     this.board.forEach((row, y) => {
@@ -79,29 +98,29 @@ class Sokoban {
         this.paintCell(this.context, cell, x, y)
       })
     })
-
     const rowsWithVoid = this.board.filter((row) => row.some((entry) => entry === VOID))
     // The player herself might be standing on an initially void cell:
-    if (isVoid(this.level[this.findPlayerCoords().y][this.findPlayerCoords().x])) {
-      rowsWithVoid.push(this.level[this.findPlayerCoords().y]);
+    if (isVoid(this.board[this.findPlayerCoords().y][this.findPlayerCoords().x])) {
+      rowsWithVoid.push(this.board[this.findPlayerCoords().y]);
     }
-
-    const rowsWithSuccess = this.board.flatMap(a => a).filter(a => a === "success_block")
-    const levelSuccessBlocks = this.level.flatMap(a => a).filter(a => a === "success_block" || a === "void")
+    const rowsWithSuccess = this.level.flatMap(a => a).filter(a => a === "void" || a === "success_block")
+    const levelSuccessBlocks = this.board.flatMap(a => a).filter(a => a === "success_block")
     const isWin = rowsWithVoid.length === 0 && rowsWithSuccess.length === levelSuccessBlocks.length
-
     if (isWin) {
-      // A winner is you
       this.context.fillStyle = '#111'
       this.context.fillRect(0, 0, size.width, size.height)
       this.context.font = 'bold 60px sans-serif'
       this.context.fillStyle = colors.success_block.fill
       this.context.fillText('勝利!', 65, 300)
       setTimeout(() => {
-        this.levelIndex++
-        this.level = levels[this.levelIndex]
-        localStorage.setItem("dw-sokoban-level", this.levelIndex)
-        this.render({ level: this.levelIndex })
+        this.boardIndex++
+        if (Number(localStorage.getItem("dw-sokoban-maxlevel")) <= this.boardIndex) {
+          localStorage.setItem("dw-sokoban-maxlevel", this.boardIndex)
+        }
+        this.level = levels[this.boardIndex]
+        document.querySelector('#levelselector').selectedIndex = this.boardIndex
+        localStorage.setItem("dw-sokoban-currentlevel", this.boardIndex)
+        this.render({ level: this.boardIndex })
       }, 500);
     }
   }
@@ -154,7 +173,7 @@ class Sokoban {
         for (let i = 0; i < blocksInARow; i++) {
           // Add blocks
           this.board[getY(newBoxY, direction, i)][getX(newBoxX, direction, i)] =
-            isVoid(this.level[getY(newBoxY, direction, i)][getX(newBoxX, direction, i)])
+            isVoid(this.board[getY(newBoxY, direction, i)][getX(newBoxX, direction, i)])
               ? SUCCESS_BLOCK
               : BLOCK
         }
@@ -163,7 +182,7 @@ class Sokoban {
     } else {
       // Move box
       // If on top of void, make into a success box
-      this.board[newBoxY][newBoxX] = isVoid(this.level[newBoxY][newBoxX]) ? SUCCESS_BLOCK : BLOCK
+      this.board[newBoxY][newBoxX] = isVoid(this.board[newBoxY][newBoxX]) ? SUCCESS_BLOCK : BLOCK
       this.movePlayer(playerCoords, direction)
     }
   }

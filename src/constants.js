@@ -5,14 +5,12 @@ export const BLOCK = 'block'
 export const SUCCESS_BLOCK = 'success_block'
 export const VOID = 'void'
 export const PLAYER = 'player'
-
 export const directions = {
   up: 'up',
   down: 'down',
   left: 'left',
   right: 'right',
 }
-
 export const keys = {
   [directions.up]: 'ArrowUp',
   [directions.down]: 'ArrowDown',
@@ -23,14 +21,6 @@ export const keys = {
   s: 's',
   d: 'd',
 }
-
-export const size = {
-  height: 1275,
-  width: 2175,
-}
-
-export const multiplier = 75
-
 export const colors = {
   empty: { fill: '#ded7b3', stroke: '#ded7b3' },
   wall: { fill: '#868687', stroke: '#505051' },
@@ -43,6 +33,8 @@ export const levels = [
   [
     [WALL, WALL, WALL, WALL, WALL, WALL],
     [WALL, EMPTY, VOID, BLOCK, PLAYER, WALL],
+    [WALL, EMPTY, VOID, BLOCK, EMPTY, WALL],
+    [WALL, EMPTY, EMPTY, EMPTY, EMPTY, WALL],
     [WALL, WALL, WALL, WALL, WALL, WALL],
   ],
   [
@@ -420,7 +412,7 @@ export const levels = [
     [EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL],
     [WALL, WALL, EMPTY, EMPTY, EMPTY, WALL, WALL],
     [WALL, EMPTY, BLOCK, BLOCK, BLOCK, EMPTY, WALL],
-    [WALL, EMPTY, VOID, +VOID, EMPTY, WALL],
+    [WALL, EMPTY, VOID, PLAYER, VOID, EMPTY, WALL],
     [WALL, WALL, WALL, WALL, WALL, WALL, WALL],
   ],
   [
@@ -1063,7 +1055,7 @@ export const levels = [
     [EMPTY, EMPTY, WALL, WALL, EMPTY, WALL, WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL],
     [EMPTY, EMPTY, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, SUCCESS_BLOCK, EMPTY, EMPTY, WALL],
     [WALL, WALL, WALL, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL, EMPTY, WALL, WALL, WALL],
-    [WALL, EMPTY, EMPTY, SUCCESS_BLOCK, WALL, BLOCK, +EMPTY, EMPTY, EMPTY, WALL],
+    [WALL, EMPTY, EMPTY, SUCCESS_BLOCK, WALL, BLOCK, PLAYER, EMPTY, EMPTY, EMPTY, WALL],
     [WALL, EMPTY, WALL, EMPTY, EMPTY, EMPTY, WALL, WALL, EMPTY, WALL, WALL],
     [WALL, EMPTY, EMPTY, EMPTY, WALL, EMPTY, EMPTY, SUCCESS_BLOCK, EMPTY, EMPTY, WALL],
     [WALL, WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, WALL, EMPTY, WALL],
@@ -1714,3 +1706,18 @@ export const levels = [
     [WALL, WALL, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, WALL, WALL, WALL, EMPTY, WALL, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL]
   ]
 ]
+export const maxWidth = levels.reduce((acc, row) => {
+  var maxCol = Math.max(...row.map(a => a.length))
+  if (acc["row"] < row.length) {
+    acc["row"] = row.length
+  }
+  if (acc["col"] < maxCol) {
+    acc["col"] = maxCol
+  }
+  return acc
+}, { row: 0, col: 0 })
+export const multiplier = 25
+export const size = {
+  height: multiplier * maxWidth.row,
+  width: multiplier * maxWidth.col,
+}
