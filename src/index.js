@@ -41,7 +41,7 @@ document.querySelector('button').addEventListener('click', (event) => {
   sokoban.render({ restart: true })
 })
 levelSelector.addEventListener('change', (event) => {
-  localStorage.setItem("dw-sokoban-currentlevel", Number(event.target.value))
+  localStorage.setItem("dw-sokoban-currentlevel", event.target.value)
   sokoban.render({ level: Number(event.target.value) })
   event.target.blur()
 })

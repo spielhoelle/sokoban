@@ -39,17 +39,21 @@ class Sokoban {
     const currentlevel = localStorage.getItem("dw-sokoban-currentlevel") ? Number(localStorage.getItem("dw-sokoban-currentlevel")) : 0
     if (currentlevel > maxLevel) {
       localStorage.setItem("dw-sokoban-maxlevel", currentlevel)
-      document.querySelector('#levelselector').selectedIndex = this.boardIndex
     }
+    this.renderDropdown()
+  }
+  renderDropdown() {
+    const maxLevel = localStorage.getItem("dw-sokoban-maxlevel") ? Number(localStorage.getItem("dw-sokoban-maxlevel")) : 0
+    const levelSelector = document.querySelector('#levelselector')
+    levelSelector.innerHTML = ''
     levels.slice(0, Number(maxLevel) + 1).map((level, index) => {
       const option = document.createElement('option')
       option.value = index
       option.innerText = index + 1
-      document.querySelector('#levelselector').appendChild(option)
-      document.querySelector('#levelselector').selectedIndex = localStorage.getItem("dw-sokoban-currentlevel") ? Number(localStorage.getItem("dw-sokoban-currentlevel")) : 0
+      levelSelector.appendChild(option)
+      levelSelector.selectedIndex = localStorage.getItem("dw-sokoban-currentlevel") ? Number(localStorage.getItem("dw-sokoban-currentlevel")) : 0
     })
   }
-
   paintCell(context, cell, x, y) {
     if (cell === 'void' || cell === 'player') {
       const circleSize = cell === 'player' ? multiplier / 3 : multiplier / 5
@@ -118,6 +122,7 @@ class Sokoban {
           localStorage.setItem("dw-sokoban-maxlevel", this.boardIndex)
         }
         this.level = levels[this.boardIndex]
+        this.renderDropdown()
         document.querySelector('#levelselector').selectedIndex = this.boardIndex
         localStorage.setItem("dw-sokoban-currentlevel", this.boardIndex)
         this.render({ level: this.boardIndex })
