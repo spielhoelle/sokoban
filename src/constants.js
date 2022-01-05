@@ -22,8 +22,8 @@ export const keys = {
   d: 'd',
 }
 export const colors = {
-  empty: { fill: '#ded7b3', stroke: '#ded7b3' },
-  wall: { fill: '#868687', stroke: '#505051' },
+  empty: { fill: '#54fefe', stroke: '#4ce5e5' },
+  wall: { fill: '#fa56fc', stroke: '#d247d4' },
   block: { fill: '#d9ae0a', stroke: '#C79300' },
   success_block: { fill: '#4ccd5a', stroke: '#3ca448' },
   void: { fill: '#dfbbb1', stroke: '#ca8e7d' },
@@ -1706,7 +1706,7 @@ export const levels = [
     [WALL, WALL, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, WALL, WALL, WALL, EMPTY, WALL, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL]
   ]
 ]
-export const maxWidth = levels.reduce((acc, row) => {
+export const biggestLevel = levels.reduce((acc, row) => {
   var maxCol = Math.max(...row.map(a => a.length))
   if (acc["row"] < row.length) {
     acc["row"] = row.length
@@ -1716,8 +1716,16 @@ export const maxWidth = levels.reduce((acc, row) => {
   }
   return acc
 }, { row: 0, col: 0 })
-export const multiplier = 25
+export const getLevelDimensions = (level) => {
+  return level.reduce((acc, row) => {
+    if (acc["col"] < row.length) {
+      acc["col"] = row.length
+    }
+    return acc
+  }, { row: level.length, col: 0 })
+}
+export const multiplier = 22
 export const size = {
-  height: multiplier * maxWidth.row,
-  width: multiplier * maxWidth.col,
+  height: multiplier * biggestLevel.row,
+  width: multiplier * biggestLevel.col,
 }

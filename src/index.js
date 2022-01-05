@@ -5,10 +5,11 @@ const levelSelector = document.querySelector('#levelselector')
 // init
 const cachedLevel = localStorage.getItem("dw-sokoban-currentlevel")
 const theLevel = cachedLevel ? Number(cachedLevel) : 0
-
-let sokoban = new Sokoban({ level: theLevel })
-sokoban.render()
-
+let sokoban
+setTimeout(() => {
+  sokoban = new Sokoban({ level: theLevel })
+  sokoban.render()
+}, 0);
 // re-render
 document.addEventListener('keydown', (event) => {
   const playerCoords = sokoban.findPlayerCoords()
@@ -36,9 +37,14 @@ document.addEventListener('keydown', (event) => {
   sokoban.render()
 })
 
-document.querySelector('button').addEventListener('click', (event) => {
+document.querySelector('button#restartbutton').addEventListener('click', (event) => {
   levelSelector.value = theLevel
   sokoban.render({ restart: true })
+})
+Array.from(document.querySelectorAll('button.highscorebutton')).map(button => {
+  button.addEventListener('click', (event) => {
+    document.querySelector('#highscore').classList.toggle('d-none')
+  })
 })
 levelSelector.addEventListener('change', (event) => {
   localStorage.setItem("dw-sokoban-currentlevel", event.target.value)

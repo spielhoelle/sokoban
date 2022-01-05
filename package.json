@@ -6,6 +6,7 @@
   "scripts": {
     "start": "webpack --mode=development --progress --watch",
     "dev": "concurrently 'webpack --mode=development --watch' 'live-server --watch='dist''  -n 'WEBPACK,LIVE-SERVER' --prefix name -c 'blue.bold,red.bold' --use_strict",
+    "build": "zip -vr sokoban.zip index.html dist/main.js style.css banner.png",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

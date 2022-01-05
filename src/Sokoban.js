@@ -9,7 +9,8 @@ import {
   multiplier,
   colors,
   levels,
-  maxWidth
+  getLevelDimensions,
+  biggestLevel
 } from './constants.js'
 import {
   isBlock,
@@ -24,6 +25,7 @@ import {
 
 class Sokoban {
   constructor({ level }) {
+    document.querySelector('.header').classList.remove('d-none')
     this.canvas = document.querySelector('canvas')
     this.canvas.width = size.width
     this.canvas.height = size.height
@@ -35,6 +37,7 @@ class Sokoban {
     this.board = generateGameBoard({ level })
     this.boardIndex = level
     this.level = levels[level]
+    this.steps = 0
     const maxLevel = localStorage.getItem("dw-sokoban-maxlevel") ? Number(localStorage.getItem("dw-sokoban-maxlevel")) : 0
     const currentlevel = localStorage.getItem("dw-sokoban-currentlevel") ? Number(localStorage.getItem("dw-sokoban-currentlevel")) : 0
     if (currentlevel > maxLevel) {
@@ -55,6 +58,10 @@ class Sokoban {
     })
   }
   paintCell(context, cell, x, y) {
+    const levelDimension = getLevelDimensions(this.board)
+    const offset = { row: Math.floor((biggestLevel.row - levelDimension.row) / 2), col: Math.floor((biggestLevel.col - levelDimension.col) / 2) }
+    x = x + offset.col
+    y = y + offset.row
     if (cell === 'void' || cell === 'player') {
       const circleSize = cell === 'player' ? multiplier / 3 : multiplier / 5
 
@@ -85,15 +92,42 @@ class Sokoban {
   }
 
   render(options = {}) {
+    const highscore = localStorage.getItem('dw-sokoban-highscore') ? JSON.parse(localStorage.getItem('dw-sokoban-highscore')) : {}
+    const highscoreSelector = document.querySelector('#highscore #score')
+    const table = document.createElement('table')
+    const thRow = document.createElement('tr')
+    const thcell = document.createElement('th')
+    const thcell2 = document.createElement('th')
+    thcell.innerText = "Level"
+    thcell2.innerText = "Score"
+    thRow.appendChild(thcell)
+    thRow.appendChild(thcell2)
+    table.appendChild(thRow)
+
+    Object.keys(highscore).map(score => {
+      const row = document.createElement('tr')
+      const cell = document.createElement('td')
+      const cell2 = document.createElement('td')
+      cell.innerText = `${Number(score) + 1}`
+      cell2.innerText = `${highscore[score]}`
+      row.appendChild(cell)
+      row.appendChild(cell2)
+      table.appendChild(row)
+    })
+    highscoreSelector.innerHTML = table.outerHTML
     this.context = this.canvas.getContext('2d')
-    this.context.fillStyle = "black"
+    this.context.fillStyle = "#202020"
     this.context.fillRect(0, 0, size.width, size.height)
     if (options.restart) {
-      localStorage.removeItem("dw-sokoban-currentlevel")
-      this.board = generateGameBoard({ level: options.level || 0 })
+      // localStorage.removeItem("dw-sokoban-currentlevel")
+      this.steps = 0
+      this.board = generateGameBoard({ level: this.boardIndex })
+      document.querySelector('#steps').innerHTML = `Steps: ${this.steps}`
     }
     if (options.level !== undefined) {
       this.level = levels[options.level]
+      this.steps = 0
+      document.querySelector('#steps').innerHTML = `Steps: ${this.steps}`
       this.boardIndex = options.level
       this.board = generateGameBoard({ level: options.level })
     }
@@ -113,10 +147,14 @@ class Sokoban {
     if (isWin) {
       this.context.fillStyle = '#111'
       this.context.fillRect(0, 0, size.width, size.height)
-      this.context.font = 'bold 60px sans-serif'
+      this.context.font = 'bold 50px sans-serif'
       this.context.fillStyle = colors.success_block.fill
-      this.context.fillText('勝利!', 65, 300)
+      this.context.fillText(`Complete with ${this.steps} steps!`, 25, 150)
       setTimeout(() => {
+        localStorage.setItem("dw-sokoban-highscore",
+          highscore
+            ? JSON.stringify({ ...highscore, [this.boardIndex]: highscore[this.boardIndex] == undefined || highscore[this.boardIndex] > this.steps ? this.steps : highscore[this.boardIndex] })
+            : JSON.stringify({ [this.boardIndex]: this.steps }))
         this.boardIndex++
         if (Number(localStorage.getItem("dw-sokoban-maxlevel")) <= this.boardIndex) {
           localStorage.setItem("dw-sokoban-maxlevel", this.boardIndex)
@@ -151,6 +189,8 @@ class Sokoban {
 
     // Move player
     this.board[getY(playerCoords.y, direction, 1)][getX(playerCoords.x, direction, 1)] = PLAYER
+    this.steps++
+    document.querySelector('#steps').innerHTML = `Steps: ${this.steps}`
   }
 
   movePlayerAndBoxes(playerCoords, direction) {

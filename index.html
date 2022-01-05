@@ -8,15 +8,28 @@
 </head>
 
 <body>
-  <header>
-    <h1>倉庫番</h1>
-    <span>レベル </span>&nbsp;
-    <select id="levelselector">
-    </select>
-    <button>Restart</button>
-  </header>
+  <div class="container">
+    <header class="header d-none">
+      <div class="banner" alt='banner'></div>
+      <div>
+        <!-- <h1>倉庫番</h1> -->
+        <span id="steps">Steps: 0</span>
+        <span>Level: </span>&nbsp;
+        <select id="levelselector">
+        </select>
+        <button id='restartbutton'>Restart</button>
+        <button class='highscorebutton'>Highscores</button>
+        &nbsp;
+        </div>
+        <div class="d-none" id="highscore">
+          <h2>Highscore</h2>
+          <div id="score"> </div>
+          <button class='highscorebutton closebutton'>Close</button>
+        </div>
+        </header>
 
-  <canvas></canvas>
+    <canvas></canvas>
+  </div>
 </body>
 
 <script src="dist/main.js"></script>
