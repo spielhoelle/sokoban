@@ -6,10 +6,17 @@ const levelSelector = document.querySelector('#levelselector')
 const cachedLevel = localStorage.getItem("dw-sokoban-currentlevel")
 const theLevel = cachedLevel ? Number(cachedLevel) : 0
 let sokoban
-setTimeout(() => {
+// window.triggerWortalAd("preroll", "Game initialized ad", function () {
+//   console.log("Before ad!");
+// }, function () {
+//   console.log("After ad");
+// }, function () {
+//   console.log("adBreakDone");
+// });
+// setTimeout(() => {
   sokoban = new Sokoban({ level: theLevel })
   sokoban.render()
-}, 0);
+// }, 1000);
 // re-render
 document.addEventListener('keydown', (event) => {
   const playerCoords = sokoban.findPlayerCoords()
