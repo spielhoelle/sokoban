@@ -163,7 +163,9 @@ class Sokoban {
         this.renderDropdown()
         document.querySelector('#levelselector').selectedIndex = this.boardIndex
         localStorage.setItem("dw-sokoban-currentlevel", this.boardIndex)
-        CallAd(AdTypes.next, "Win level");
+        if (CallAd !== undefined) {
+          CallAd(AdTypes.next, "Win level");
+        }
         this.render({ level: this.boardIndex })
       }, 500);
     }

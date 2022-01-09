@@ -9,13 +9,13 @@ html {
 }
 
 body {
+  touch-action: manipulation;
   margin: 0;
   font-family: sans-serif;
   background: #222;
   height: 100vh;
   line-height: 1.2;
   color: var(--primary);
-  text-shadow: 1px 1px 0 var(--secondary);
   display: flex;
   flex-flow: column;
   align-items: center;
@@ -34,7 +34,6 @@ body {
 h1 {
   margin: 0 0 0.5rem;
   font-size: 6rem;
-  text-shadow: 5px 5px 0 var(--secondary);
 }
 
 p {
@@ -73,7 +72,6 @@ header {
   background: #222;
   border-color: var(--primary);
   color: var(--primary);
-  text-shadow: 1px 1px 0 var(--secondary);
 }
 
 #levelselector:focus, #levelselector:focus-visible {
