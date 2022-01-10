@@ -25,10 +25,14 @@ body {
 
 .container {
   display: flex;
-  flex-flow: column;
   align-items: center;
   justify-content: center;
+}
 
+@media (orientation: portrait) {
+  .container {
+    flex-direction: column;
+  }
 }
 
 h1 {
@@ -127,6 +131,108 @@ header {
   background-repeat: no-repeat;
   background-position: center center;
 }
+
+.board {
+  display: flex;
+}
+
+@media (orientation: portrait) {
+  .board {
+    flex-direction: column;
+  }
+}
+
+.controls {
+  justify-content: center;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin: 1rem;
+}
+
+.lowercontrols {
+  display: flex;
+  justify-content: center;
+  display: flex;
+}
+
+.lowercontrols button {
+  margin: 0.5rem 2rem;
+}
+
+.triangle {
+  width: 30px;
+}
+
+.rotate-90 {
+  transform: rotate(90deg);
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.rotate-270 {
+  transform: rotate(270deg);
+}
+
+button {
+  padding: 0.5rem 0.5rem;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.controls button img {
+  pointer-events: none;
+}
+
+.header {
+  display: none;
+}
+
+.header.menutoggled {
+  display: block;
+  position: fixed;
+  background: #333;
+  padding: 20px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.lowerbutton {
+  position: absolute;
+  right: 10px;
+  top: auto;
+  bottom: 0;
+}
+
+@media (min-width: 900px) {
+
+  .header {
+    display: block;
+  }
+
+  .closebutton {
+    display: none;
+  }
+
+  .menubutton {
+    display: none;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+  }
+
+  .controls {
+    display: none;
+  }
+}
+
+@media (orientation: landscape) {}
 
 @keyframes circle {
   0% {

@@ -29,7 +29,7 @@ export const colors = {
   void: { fill: '#dfbbb1', stroke: '#ca8e7d' },
   player: { fill: '#4f99e8', stroke: '#3f7ab9' },
 }
-export const levels = [
+let levels = [
   [
     [WALL, WALL, WALL, WALL, WALL, WALL],
     [WALL, EMPTY, VOID, BLOCK, PLAYER, WALL],
@@ -1706,6 +1706,27 @@ export const levels = [
     [WALL, WALL, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, WALL, WALL, WALL, EMPTY, WALL, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL]
   ]
 ]
+export const transpose = (array) => {
+  var result = [];
+  array.forEach(function (a, i, aa) {
+    a.forEach(function (b, j, bb) {
+      result[j] = result[j] || [];
+      result[j][aa.length - i - 1] = b;
+    });
+  });
+  result = result.map(t => Array.from(t, (_, i) => {
+    if (!(i in t)) return WALL;
+    else return t[i];
+  }))
+  return result;
+}
+if (window.innerWidth < window.innerHeight) {
+  levels = levels.map(l => {
+    l = transpose(l)
+    return l
+  })
+}
+export { levels }
 export const biggestLevel = levels.reduce((acc, row) => {
   var maxCol = Math.max(...row.map(a => a.length))
   if (acc["row"] < row.length) {

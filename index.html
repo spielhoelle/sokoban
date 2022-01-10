@@ -5,7 +5,7 @@
   <title>倉庫番</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 </head>
 
@@ -37,14 +37,17 @@
         </div>
       </div>
       <div class="controls" </div>
-        <button class="directionbutton" data-key="ArrowUp">up</button>
+        <button class="directionbutton m-0" data-key="ArrowUp"><img class="triangle" src="triangle.svg" /></button>
         <div class="lowercontrols">
-          <button class="directionbutton" data-key="ArrowLeft">left</button>
-          <button class="directionbutton" data-key="ArrowDown">down</button>
-          <button class="directionbutton" data-key="ArrowRight">right</button>
+          <button class="directionbutton" data-key="ArrowLeft"><img class="triangle rotate-270" src="triangle.svg" /></button>
+          <button class="directionbutton" data-key="ArrowRight"><img class="triangle rotate-90" src="triangle.svg" /></button>
+          </div>
+          <div>
+            <button class="directionbutton m-0" data-key="ArrowDown"><img class="triangle rotate-180"
+                src="triangle.svg" /></button>
         </div>
       </div>
-      </div>
+    </div>
 </body>
 
 <script src="dist/main.js"></script>

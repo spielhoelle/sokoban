@@ -22,18 +22,15 @@ import {
   countBlocks,
   generateGameBoard,
 } from './utils.js'
-
 class Sokoban {
   constructor({ level }) {
     document.querySelector('.header').classList.remove('d-none')
     this.canvas = document.querySelector('canvas')
     this.canvas.width = size.width
     this.canvas.height = size.height
-
     this.context = this.canvas.getContext('2d')
     this.context.fillStyle = colors.empty
     this.context.fillRect(0, 0, size.width, size.height)
-
     this.board = generateGameBoard({ level })
     this.boardIndex = level
     this.level = levels[level]
@@ -64,12 +61,10 @@ class Sokoban {
     y = y + offset.row
     if (cell === 'void' || cell === 'player') {
       const circleSize = cell === 'player' ? multiplier / 3 : multiplier / 5
-
       this.context.beginPath()
       this.context.rect(x * multiplier + 2.5, y * multiplier + 2.5, multiplier, multiplier)
       this.context.fillStyle = colors.empty.fill
       this.context.fill()
-
       this.context.beginPath()
       this.context.arc(x * multiplier + 2.5 + multiplier / 2, y * multiplier + 2.5 + multiplier / 2, circleSize, 0, 2 * Math.PI)
       this.context.lineWidth = multiplier / 5
@@ -82,7 +77,6 @@ class Sokoban {
       this.context.rect(x * multiplier + 5, y * multiplier + 5, multiplier - multiplier / 5, multiplier - multiplier / 5)
       this.context.fillStyle = colors[cell].fill
       this.context.fill()
-
       this.context.beginPath()
       this.context.rect(x * multiplier + 5, y * multiplier + 5, multiplier - multiplier / 5, multiplier - multiplier / 5)
       this.context.lineWidth = multiplier / 5
@@ -90,7 +84,6 @@ class Sokoban {
       this.context.stroke()
     }
   }
-
   render(options = {}) {
     const highscore = localStorage.getItem('dw-sokoban-highscore') ? JSON.parse(localStorage.getItem('dw-sokoban-highscore')) : {}
     const highscoreSelector = document.querySelector('#highscore #score')
@@ -103,7 +96,6 @@ class Sokoban {
     thRow.appendChild(thcell)
     thRow.appendChild(thcell2)
     table.appendChild(thRow)
-
     Object.keys(highscore).map(score => {
       const row = document.createElement('tr')
       const cell = document.createElement('td')
@@ -119,7 +111,6 @@ class Sokoban {
     this.context.fillStyle = "#202020"
     this.context.fillRect(0, 0, size.width, size.height)
     if (options.restart) {
-      // localStorage.removeItem("dw-sokoban-currentlevel")
       this.steps = 0
       this.board = generateGameBoard({ level: this.boardIndex })
       document.querySelector('#steps').innerHTML = `Steps: ${this.steps}`
@@ -170,7 +161,6 @@ class Sokoban {
       }, 500);
     }
   }
-
   findPlayerCoords() {
     const y = this.board.findIndex((row) => row.includes(PLAYER))
     const x = this.board[y].indexOf(PLAYER)
@@ -184,29 +174,24 @@ class Sokoban {
       sideRight: this.board[y][x + 1],
     }
   }
-
   movePlayer(playerCoords, direction) {
     // Replace previous spot with initial board state (void or empty)
     this.board[playerCoords.y][playerCoords.x] =
       isVoid(this.level[playerCoords.y][playerCoords.x]) ? VOID : EMPTY
-
     // Move player
     this.board[getY(playerCoords.y, direction, 1)][getX(playerCoords.x, direction, 1)] = PLAYER
     this.steps++
     document.querySelector('#steps').innerHTML = `Steps: ${this.steps}`
   }
-
   movePlayerAndBoxes(playerCoords, direction) {
     const newPlayerY = getY(playerCoords.y, direction, 1)
     const newPlayerX = getX(playerCoords.x, direction, 1)
     const newBoxY = getY(playerCoords.y, direction, 2)
     const newBoxX = getX(playerCoords.x, direction, 2)
-
     // Don't move if the movement pushes a box into a wall
     if (isWall(this.board[newBoxY][newBoxX])) {
       return
     }
-
     // Count how many blocks are in a row
     let blocksInARow = 0
     if (isBlock(this.board[newBoxY][newBoxX])) {
@@ -237,22 +222,18 @@ class Sokoban {
 
   move(playerCoords, direction) {
     const { x, y, above, below, sideLeft, sideRight } = playerCoords
-
     const adjacentCell = {
       [directions.up]: above,
       [directions.down]: below,
       [directions.left]: sideLeft,
       [directions.right]: sideRight,
     }
-
     if (isTraversible(adjacentCell[direction])) {
       this.movePlayer(playerCoords, direction)
     }
-
     if (isBlock(adjacentCell[direction])) {
       this.movePlayerAndBoxes(playerCoords, direction)
     }
   }
 }
-
 export default Sokoban
