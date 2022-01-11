@@ -147,7 +147,7 @@ header {
   display: flex;
   flex-flow: column;
   align-items: center;
-
+  margin: 1rem;
 }
 
 .lowercontrols {
@@ -156,8 +156,49 @@ header {
   display: flex;
 }
 
+.mr-4 {
+  margin-right: 2rem;
+}
+
+.ml-4 {
+  margin-left: 2rem;
+}
+
+.mt-1 {
+  margin-top: 0.5rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+
+
+.triangle {
+  width: 30px;
+}
+
+.rotate-90 {
+  transform: rotate(90deg);
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.rotate-270 {
+  transform: rotate(270deg);
+}
+
 button {
   padding: 0.5rem 0.5rem;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.controls button img {
+  pointer-events: none;
 }
 
 .header {
@@ -168,7 +209,7 @@ button {
   display: block;
   position: fixed;
   background: #333;
-  padding: 20px;
+  padding: 40px;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -184,6 +225,7 @@ button {
 @media (min-width: 900px) {
 
   .header {
+    padding: 0.5rem;
     display: block;
   }
 
