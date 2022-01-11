@@ -6,7 +6,7 @@ import {
   PLAYER,
   directions,
   size,
-  multiplier,
+  multiplier as modifiedMultiplier,
   colors,
   levels,
   getLevelDimensions,
@@ -22,12 +22,31 @@ import {
   countBlocks,
   generateGameBoard,
 } from './utils.js'
+let multiplier = modifiedMultiplier
 class Sokoban {
   constructor({ level }) {
     document.querySelector('.header').classList.remove('d-none')
     this.canvas = document.querySelector('canvas')
     this.canvas.width = size.width
     this.canvas.height = size.height
+    const vOverlap = document.querySelector('.board').clientHeight + this.canvas.height - window.innerHeight
+    const hOverlap = document.querySelector('.board').clientWidth + this.canvas.width - window.innerWidth
+    if (vOverlap > 0 && window.innerHeight > window.innerWidth) {
+      const formerHeight = this.canvas.height
+      this.canvas.height = this.canvas.height - vOverlap - 35
+      this.canvas.width = this.canvas.width * (this.canvas.height / formerHeight)
+      size.height = Math.floor(size.height * (this.canvas.height / formerHeight))
+      size.width = Math.floor(size.width * (this.canvas.height / formerHeight))
+      multiplier = multiplier * (this.canvas.height / formerHeight)
+    }
+    if (hOverlap > 0 && window.innerHeight < window.innerWidth) {
+      const formerWidth = this.canvas.width
+      this.canvas.width = this.canvas.width - hOverlap - 35
+      this.canvas.height = this.canvas.height * (this.canvas.width / formerWidth)
+      size.height = Math.floor(size.height * (this.canvas.width / formerWidth))
+      size.width = Math.floor(size.width * (this.canvas.width / formerWidth))
+      multiplier = multiplier * (this.canvas.width / formerWidth)
+    }
     this.context = this.canvas.getContext('2d')
     this.context.fillStyle = colors.empty
     this.context.fillRect(0, 0, size.width, size.height)
@@ -35,7 +54,8 @@ class Sokoban {
     this.boardIndex = level
     this.level = levels[level]
     this.steps = 0
-    const maxLevel = localStorage.getItem("dw-sokoban-maxlevel") ? Number(localStorage.getItem("dw-sokoban-maxlevel")) : 0
+    // const maxLevel = localStorage.getItem("dw-sokoban-maxlevel") ? Number(localStorage.getItem("dw-sokoban-maxlevel")) : 0
+    const maxLevel = levels.length
     const currentlevel = localStorage.getItem("dw-sokoban-currentlevel") ? Number(localStorage.getItem("dw-sokoban-currentlevel")) : 0
     if (currentlevel > maxLevel) {
       localStorage.setItem("dw-sokoban-maxlevel", currentlevel)
@@ -43,7 +63,8 @@ class Sokoban {
     this.renderDropdown()
   }
   renderDropdown() {
-    const maxLevel = localStorage.getItem("dw-sokoban-maxlevel") ? Number(localStorage.getItem("dw-sokoban-maxlevel")) : 0
+    // const maxLevel = localStorage.getItem("dw-sokoban-maxlevel") ? Number(localStorage.getItem("dw-sokoban-maxlevel")) : 0
+    const maxLevel = levels.length
     const levelSelector = document.querySelector('#levelselector')
     levelSelector.innerHTML = ''
     levels.slice(0, Number(maxLevel) + 1).map((level, index) => {

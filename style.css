@@ -156,9 +156,22 @@ header {
   display: flex;
 }
 
-.lowercontrols button {
-  margin: 0.5rem 2rem;
+.mr-4 {
+  margin-right: 2rem;
 }
+
+.ml-4 {
+  margin-left: 2rem;
+}
+
+.mt-1 {
+  margin-top: 0.5rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+
 
 .triangle {
   width: 30px;
@@ -196,7 +209,7 @@ button {
   display: block;
   position: fixed;
   background: #333;
-  padding: 20px;
+  padding: 40px;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -212,6 +225,7 @@ button {
 @media (min-width: 900px) {
 
   .header {
+    padding: 0.5rem;
     display: block;
   }
 

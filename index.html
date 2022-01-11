@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>倉庫番</title>
+  <title>Sokoban</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
@@ -20,31 +20,34 @@
       <div class="header d-none">
         <div class="banner" alt='banner'></div>
         <div>
-          <!-- <h1>倉庫番</h1> -->
-          <span id="steps">Steps: 0</span>
-          <span>Level: </span>&nbsp;
-          <select id="levelselector">
-          </select>
+          <div>
+            <span id="steps">Steps: 0</span>
+            <span>Level: </span>&nbsp;
+            <select id="levelselector">
+            </select>
+          </div>
           <button id='restartbutton'>Restart</button>
           <button class='highscorebutton'>Highscores</button>
           &nbsp;
-          <button class="menubutton closebutton">Close</button>
+          <button class="menubutton closebutton">X</button>
         </div>
         <div class="d-none" id="highscore">
           <h2>Highscore</h2>
           <div id="score"> </div>
-          <button class='highscorebutton closebutton'>Close</button>
+          <button class='highscorebutton closebutton'>X</button>
         </div>
       </div>
-      <div class="controls" </div>
+      <div class="controls">
         <button class="directionbutton m-0" data-key="ArrowUp"><img class="triangle" src="triangle.svg" /></button>
         <div class="lowercontrols">
-          <button class="directionbutton" data-key="ArrowLeft"><img class="triangle rotate-270" src="triangle.svg" /></button>
-          <button class="directionbutton" data-key="ArrowRight"><img class="triangle rotate-90" src="triangle.svg" /></button>
-          </div>
-          <div>
-            <button class="directionbutton m-0" data-key="ArrowDown"><img class="triangle rotate-180"
-                src="triangle.svg" /></button>
+          <button class="directionbutton mr-4" data-key="ArrowLeft"><img class="triangle rotate-270"
+              src="triangle.svg" /></button>
+          <button class="directionbutton ml-4" data-key="ArrowRight"><img class="triangle rotate-90"
+              src="triangle.svg" /></button>
+        </div>
+        <div>
+          <button class="directionbutton m-0" data-key="ArrowDown"><img class="triangle rotate-180"
+              src="triangle.svg" /></button>
         </div>
       </div>
     </div>
