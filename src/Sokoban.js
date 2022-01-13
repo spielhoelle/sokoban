@@ -159,9 +159,10 @@ class Sokoban {
     if (isWin) {
       this.context.fillStyle = '#111'
       this.context.fillRect(0, 0, size.width, size.height)
-      this.context.font = 'bold 50px sans-serif'
+      this.context.font = 'bold 30px sans-serif'
+      this.context.textAlign = "center";
       this.context.fillStyle = colors.success_block.fill
-      this.context.fillText(`Complete with ${this.steps} steps!`, 25, 150)
+      this.context.fillText(`Complete with ${this.steps} steps!`, this.canvas.width / 2, this.canvas.height / 2)
       setTimeout(() => {
         localStorage.setItem("dw-sokoban-highscore",
           highscore
@@ -175,11 +176,14 @@ class Sokoban {
         this.renderDropdown()
         document.querySelector('#levelselector').selectedIndex = this.boardIndex
         localStorage.setItem("dw-sokoban-currentlevel", this.boardIndex)
-        if (CallAd !== undefined) {
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        if (urlParams.get('debug') !== 'true') {
           CallAd(AdTypes.next, "Win level");
         }
         this.render({ level: this.boardIndex })
-      }, 500);
+      }, 1000);
     }
   }
   findPlayerCoords() {
