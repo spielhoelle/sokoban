@@ -102,14 +102,28 @@ header {
   overflow-y: scroll;
   padding-top: 20px;
   height: calc(100% - 40px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 #highscore td, #highscore th {
   padding: 0 10px;
+  text-align: left;
 }
 
 .d-none {
   display: none;
+}
+
+@media (min-width: 900px) {
+  .d-md-none {
+    display: none;
+  }
+
+  .d-md-block {
+    display: block;
+  }
 }
 
 .closebutton {
@@ -133,12 +147,7 @@ header {
 
 .board {
   display: flex;
-}
-
-@media (orientation: portrait) {
-  .board {
-    flex-direction: column;
-  }
+  flex-direction: column;
 }
 
 .controls {
@@ -196,6 +205,7 @@ button {
   margin: 0;
 }
 
+.controls button span,
 .controls button img {
   pointer-events: none;
 }
@@ -241,9 +251,6 @@ button {
     padding: 0.5rem 1rem;
   }
 
-  .controls {
-    display: none;
-  }
 }
 
 @media (orientation: landscape) {}

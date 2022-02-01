@@ -5,9 +5,8 @@ var WORTAL_API_INIT_SCRIPT = document.createElement("script");
 WORTAL_API_INIT_SCRIPT.src = "dist/WortalAd.js";
 WORTAL_API_INIT_SCRIPT.type = 'text/javascript';
 const head = document.getElementsByTagName("head");
-const urlParams = new URLSearchParams(window.location.search);
 
-if (urlParams.get('debug') !== 'true') {
+if (["localhost"].filter(url => window.location.href.includes(url)).length === 0) {
   head[head.length - 1].appendChild(WORTAL_API_INIT_SCRIPT);
 } else {
   document.getElementById("black-cover").hidden = true;
