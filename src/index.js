@@ -7,7 +7,8 @@ WORTAL_API_INIT_SCRIPT.type = 'text/javascript';
 const head = document.getElementsByTagName("head");
 
 const noAdDomains = ["localhost", 't.tmy.io']
-if (noAdDomains.filter(url => window.location.href.includes(url)).lenght === 0) {
+const isProd = noAdDomains.filter(url => window.location.href.includes(url)).length === 0
+if (isProd) {
   head[head.length - 1].appendChild(WORTAL_API_INIT_SCRIPT);
 } else {
   document.getElementById("black-cover").hidden = true;
@@ -56,6 +57,7 @@ Array.from(document.querySelectorAll(".directionbutton")).map(button => {
 document.addEventListener('keydown', (event) => move(event))
 
 document.querySelector('button#restartbutton').addEventListener('click', (event) => {
+  CallAd(AdTypes.browse, "Restart");
   levelSelector.value = theLevel
   sokoban.render({ restart: true })
 })
@@ -69,7 +71,7 @@ document.querySelector('button.highscorebutton').addEventListener('click', (even
 })
 document.querySelector('button.nextbutton').addEventListener('click', (event) => {
   document.querySelector('#winpopup').classList.add('d-none')
-  if (noAdDomains.filter(url => window.location.href.includes(url)).lenght === 0) {
+  if (isProd) {
     CallAd(AdTypes.next, "Win level");
   }
   sokoban.render({ level: sokoban.boardIndex })

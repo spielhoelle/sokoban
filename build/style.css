@@ -1,7 +1,7 @@
 :root {
-  --primary: #4ae1e1;
-  --primary-dark: #3ebcbc;
-  --secondary: #fa56fc;
+  --primary: #eeeeee;
+  --primary-dark: #cccccc;
+  --secondary: #111111;
 }
 
 html {
@@ -81,17 +81,31 @@ header {
   border: 0 none;
 }
 
-#highscore {
+.popup {
   position: fixed;
-  width: 400px;
-  height: 300px;
+  max-width: 400px;
+  width: 100%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: #222;
-  padding: 20px;
   border: 1px solid var(--secondary);
   overflow: hidden;
+  box-shadow: 0 0 60px #00000047;
+}
+
+.popup h2 {
+  margin: 0;
+}
+
+.popup-container {
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 #highscore h2 {
@@ -239,9 +253,6 @@ button {
     display: block;
   }
 
-  .closebutton:not(.highscorebutton) {
-    display: none;
-  }
 
   .menubutton {
     display: none;
