@@ -83,11 +83,11 @@ class Sokoban {
     if (cell === 'void' || cell === 'player') {
       const circleSize = cell === 'player' ? multiplier / 3 : multiplier / 5
       this.context.beginPath()
-      this.context.rect(x * multiplier + 4, y * multiplier + 4, multiplier, multiplier)
+      this.context.rect(x * multiplier - 1, y * multiplier - 1, multiplier - 0.5, multiplier - 0.5)
       this.context.fillStyle = colors.empty.fill
       this.context.fill()
       this.context.beginPath()
-      this.context.arc(x * multiplier + 3 + multiplier / 2, y * multiplier + 3 + multiplier / 2, circleSize, 0, 2 * Math.PI)
+      this.context.arc(x * multiplier + (multiplier - (multiplier / 2) - 1.5), y * multiplier + (multiplier - (multiplier / 2) - 1.5), circleSize, 0, 2 * Math.PI)
       this.context.lineWidth = multiplier / 10
       this.context.strokeStyle = colors[cell].stroke
       this.context.fillStyle = colors[cell].fill
@@ -95,11 +95,10 @@ class Sokoban {
       this.context.stroke()
     } else {
       this.context.beginPath()
-      this.context.rect(x * multiplier + 5, y * multiplier + 5, multiplier - multiplier / 10, multiplier - multiplier / 10)
+      this.context.rect(x * multiplier, y * multiplier, multiplier - 2.5, multiplier - 2.5)
       this.context.fillStyle = colors[cell].fill
       this.context.fill()
-      this.context.beginPath()
-      this.context.rect(x * multiplier + 5, y * multiplier + 5, multiplier - multiplier / 10, multiplier - multiplier / 10)
+      this.context.rect(x * multiplier, y * multiplier, multiplier - 2.5, multiplier - 2.5)
       this.context.lineWidth = multiplier / 10
       this.context.strokeStyle = colors[cell].stroke
       this.context.stroke()
