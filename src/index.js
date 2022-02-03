@@ -6,7 +6,8 @@ WORTAL_API_INIT_SCRIPT.src = "dist/WortalAd.js";
 WORTAL_API_INIT_SCRIPT.type = 'text/javascript';
 const head = document.getElementsByTagName("head");
 
-if (["localhost", 't.tmy.io'].filter(url => window.location.href.includes(url)).lenght === 0) {
+const noAdDomains = ["localhost", 't.tmy.io']
+if (noAdDomains.filter(url => window.location.href.includes(url)).lenght === 0) {
   head[head.length - 1].appendChild(WORTAL_API_INIT_SCRIPT);
 } else {
   document.getElementById("black-cover").hidden = true;
@@ -58,10 +59,20 @@ document.querySelector('button#restartbutton').addEventListener('click', (event)
   levelSelector.value = theLevel
   sokoban.render({ restart: true })
 })
-Array.from(document.querySelectorAll('button.highscorebutton')).map(button => {
+Array.from(document.querySelectorAll('.popup .closebutton')).map(button => {
   button.addEventListener('click', (event) => {
-    document.querySelector('#highscore').classList.toggle('d-none')
+    button.closest('.popup').classList.toggle('d-none')
   })
+})
+document.querySelector('button.highscorebutton').addEventListener('click', (event) => {
+  document.querySelector('#highscore').classList.remove('d-none')
+})
+document.querySelector('button.nextbutton').addEventListener('click', (event) => {
+  document.querySelector('#winpopup').classList.add('d-none')
+  if (noAdDomains.filter(url => window.location.href.includes(url)).lenght === 0) {
+    CallAd(AdTypes.next, "Win level");
+  }
+  sokoban.render({ level: sokoban.boardIndex })
 })
 levelSelector.addEventListener('change', (event) => {
   localStorage.setItem("dw-sokoban-currentlevel", event.target.value)

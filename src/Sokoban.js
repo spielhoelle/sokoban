@@ -156,31 +156,22 @@ class Sokoban {
     const levelSuccessBlocks = this.board.flatMap(a => a).filter(a => a === "success_block")
     const isWin = rowsWithVoid.length === 0 && rowsWithSuccess.length === levelSuccessBlocks.length
     if (isWin) {
-      this.context.fillStyle = '#111'
-      this.context.fillRect(0, 0, size.width, size.height)
-      this.context.font = 'bold 30px sans-serif'
-      this.context.textAlign = "center";
-      this.context.fillStyle = colors.success_block.fill
-      this.context.fillText(`Complete with ${this.steps} steps!`, this.canvas.width / 2, this.canvas.height / 2)
-      setTimeout(() => {
-        localStorage.setItem("dw-sokoban-highscore",
-          highscore
-            ? JSON.stringify({ ...highscore, [this.boardIndex]: highscore[this.boardIndex] == undefined || highscore[this.boardIndex] > this.steps ? this.steps : highscore[this.boardIndex] })
-            : JSON.stringify({ [this.boardIndex]: this.steps }))
-        this.boardIndex++
-        if (Number(localStorage.getItem("dw-sokoban-maxlevel")) <= this.boardIndex) {
-          localStorage.setItem("dw-sokoban-maxlevel", this.boardIndex)
-        }
-        this.level = levels[this.boardIndex]
-        this.renderDropdown()
-        document.querySelector('#levelselector').selectedIndex = this.boardIndex
-        localStorage.setItem("dw-sokoban-currentlevel", this.boardIndex)
+      document.querySelector('#winpopup').classList.remove('d-none')
+      document.querySelector('#winpopup #score').innerHTML = `Complete with ${this.steps} ${this.steps === 1 ? `step` : `steps`}`
 
-        if (["localhost", 't.tmy.io'].filter(url => window.location.href.includes(url)).lenght === 0) {
-          CallAd(AdTypes.next, "Win level");
-        }
-        this.render({ level: this.boardIndex })
-      }, 1000);
+      localStorage.setItem("dw-sokoban-highscore",
+        highscore
+          ? JSON.stringify({ ...highscore, [this.boardIndex]: highscore[this.boardIndex] == undefined || highscore[this.boardIndex] > this.steps ? this.steps : highscore[this.boardIndex] })
+          : JSON.stringify({ [this.boardIndex]: this.steps }))
+      this.boardIndex++
+      if (Number(localStorage.getItem("dw-sokoban-maxlevel")) <= this.boardIndex) {
+        localStorage.setItem("dw-sokoban-maxlevel", this.boardIndex)
+      }
+      this.level = levels[this.boardIndex]
+      this.renderDropdown()
+      document.querySelector('#levelselector').selectedIndex = this.boardIndex
+      localStorage.setItem("dw-sokoban-currentlevel", this.boardIndex)
+
     }
   }
   findPlayerCoords() {
