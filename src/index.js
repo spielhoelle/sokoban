@@ -57,8 +57,9 @@ Array.from(document.querySelectorAll(".directionbutton")).map(button => {
 document.addEventListener('keydown', (event) => move(event))
 
 document.querySelector('button#restartbutton').addEventListener('click', (event) => {
-  CallAd(AdTypes.browse, "Restart");
+  CallAd(AdTypes.next, "Restart");
   levelSelector.value = theLevel
+  event.target.closest(".menutoggled").classList.remove('menutoggled')
   sokoban.render({ restart: true })
 })
 Array.from(document.querySelectorAll('.popup .closebutton')).map(button => {
