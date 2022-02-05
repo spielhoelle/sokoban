@@ -6,7 +6,7 @@ WORTAL_API_INIT_SCRIPT.src = "dist/WortalAd.js";
 WORTAL_API_INIT_SCRIPT.type = 'text/javascript';
 const head = document.getElementsByTagName("head");
 
-const noAdDomains = ["localhost", 't.tmy.io']
+const noAdDomains = ["locaxxlhost", 't.tmy.io']
 const isProd = noAdDomains.filter(url => window.location.href.includes(url)).length === 0
 if (isProd) {
   head[head.length - 1].appendChild(WORTAL_API_INIT_SCRIPT);
@@ -59,7 +59,7 @@ document.addEventListener('keydown', (event) => move(event))
 document.querySelector('button#restartbutton').addEventListener('click', (event) => {
   CallAd(AdTypes.next, "Restart");
   levelSelector.value = theLevel
-  event.target.closest(".menutoggled").classList.remove('menutoggled')
+  event.target.closest(".menutoggled") && event.target.closest(".menutoggled").classList.remove('menutoggled')
   sokoban.render({ restart: true })
 })
 Array.from(document.querySelectorAll('.popup .closebutton')).map(button => {

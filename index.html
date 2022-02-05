@@ -15,20 +15,20 @@
       style="background: #000000; background-color: #000000; width: 100%; height: 100%; top: 0; left: 0; position: fixed; padding: 0; margin: 0; z-index: 100;">
     </div>
     <canvas></canvas>
-    <button class="menubutton lowerbutton">Menu</button>
+    <button class="menubutton lowerbutton i18nElem">menu</button>
     <div class="board">
       <div class="header d-none">
         <div class="banner" alt='banner'></div>
         <div>
           <!-- <h1>倉庫番</h1> -->
-          <div>
-            <span id="steps">Steps: 0 -</span>&nbsp;
-            <span>Level: </span>&nbsp;
-            <select id="levelselector">
-            </select>
+          <div class="nobreak">
+            <span class="i18nElem">steps</span>:&nbsp;
+            <span id="steps">0 -</span>&nbsp;
+            <span class="i18nElem">level</span>:&nbsp;
+            <select id="levelselector"> </select>
           </div>
-          <button id='restartbutton'>Restart</button>
-          <button class='highscorebutton'>Highscores</button>
+          <button class='i18nElem' id='restartbutton'>startagain</button>
+          <button class='highscorebutton i18nElem'>highscores</button>
           &nbsp;
           <button class="menubutton closebutton">X</button>
         </div>
@@ -53,21 +53,31 @@
       </div>
       <div class="d-none popup" id="highscore">
         <div class="popup-container">
-          <h2>Highscore</h2>
-          <div id="score"> </div>
+          <h2 class="i18nElem">highscores</h2>
+          <div id="score">
+            <table>
+              <thead>
+                <th class="i18nElem">level</th>
+                <th class="i18nElem">score</th>
+              </thead>
+              <tbody>
+          
+              </tbody>
+            </table>
+          </div>
           <button class='highscorebutton closebutton'>X</button>
         </div>
       </div>
       <div class="popup d-none" id="winpopup">
         <div class="popup-container">
-          <h2 id="score">Complete with</h2>
-          <button class='nextbutton'>Next level</button>
-          <button class='closebutton'>X</button>
+          <h2 class="mb-1"><span class="i18nElem">complete</span> <span id="score"></span> <span class="i18nElem">steps</span>
+          </h2>
+          <button class='nextbutton i18nElem'>next</button>
         </div>
       </div>
     </div>
 </body>
-
+<script src="dist/LocaleHandler.js"></script>
 <script src="dist/main.js"></script>
 
 </html>

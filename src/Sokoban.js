@@ -106,16 +106,8 @@ class Sokoban {
   }
   render(options = {}) {
     const highscore = localStorage.getItem('dw-sokoban-highscore') ? JSON.parse(localStorage.getItem('dw-sokoban-highscore')) : {}
-    const highscoreSelector = document.querySelector('#highscore #score')
-    const table = document.createElement('table')
-    const thRow = document.createElement('tr')
-    const thcell = document.createElement('th')
-    const thcell2 = document.createElement('th')
-    thcell.innerText = "Level"
-    thcell2.innerText = "Score"
-    thRow.appendChild(thcell)
-    thRow.appendChild(thcell2)
-    table.appendChild(thRow)
+    const highscoreSelector = document.querySelector('#highscore #score tbody')
+    highscoreSelector.innerHTML = ""
     Object.keys(highscore).map(score => {
       const row = document.createElement('tr')
       const cell = document.createElement('td')
@@ -124,21 +116,20 @@ class Sokoban {
       cell2.innerText = `${highscore[score]}`
       row.appendChild(cell)
       row.appendChild(cell2)
-      table.appendChild(row)
+      highscoreSelector.appendChild(row)
     })
-    highscoreSelector.innerHTML = table.outerHTML
     this.context = this.canvas.getContext('2d')
     this.context.fillStyle = "#202020"
     this.context.fillRect(0, 0, size.width, size.height)
     if (options.restart) {
       this.steps = 0
       this.board = generateGameBoard({ level: this.boardIndex })
-      document.querySelector('#steps').innerHTML = `Steps: ${this.steps}`
+      document.querySelector('#steps').innerHTML = `${this.steps}`
     }
     if (options.level !== undefined) {
       this.level = levels[options.level]
       this.steps = 0
-      document.querySelector('#steps').innerHTML = `Steps: ${this.steps}`
+      document.querySelector('#steps').innerHTML = `${this.steps}`
       this.boardIndex = options.level
       this.board = generateGameBoard({ level: options.level })
     }
@@ -157,7 +148,7 @@ class Sokoban {
     const isWin = rowsWithVoid.length === 0 && rowsWithSuccess.length === levelSuccessBlocks.length
     if (isWin) {
       document.querySelector('#winpopup').classList.remove('d-none')
-      document.querySelector('#winpopup #score').innerHTML = `Complete with ${this.steps} ${this.steps === 1 ? `step` : `steps`}`
+      document.querySelector('#winpopup #score').innerHTML = this.steps
 
       localStorage.setItem("dw-sokoban-highscore",
         highscore
@@ -194,7 +185,7 @@ class Sokoban {
     // Move player
     this.board[getY(playerCoords.y, direction, 1)][getX(playerCoords.x, direction, 1)] = PLAYER
     this.steps++
-    document.querySelector('#steps').innerHTML = `Steps: ${this.steps}`
+    document.querySelector('#steps').innerHTML = `${this.steps}`
   }
   movePlayerAndBoxes(playerCoords, direction) {
     const newPlayerY = getY(playerCoords.y, direction, 1)
